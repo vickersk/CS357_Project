@@ -1,4 +1,13 @@
-#!/usr/bin/python
+'''
+CS 357 Programming Project
+
+Description:
+Given two input DFAs or NFAs for languages A and B, the program will construct and
+return the NFA that accepts the concatenation AB.
+
+Author: Kai Vickers
+Last Modified: 11/22/2021
+'''
 
 import sys
 import getopt
@@ -62,7 +71,6 @@ def is_list_of_strings(lst):
     # Finally checks if all the elements in the list are strings
     return bool(lst) and isinstance(lst, list) and all(isinstance(elem, str) for elem in lst)
 
-
 def transitions_valid(transitions):
     '''
     transitions_valid
@@ -82,6 +90,7 @@ def transitions_valid(transitions):
     # Checks if transitions is a list type.
     # Returns False if not a list
     if not isinstance(transitions, list):
+        print('ERROR: Transistions is not a list')
         return False
     
     # Checks each transition in the transitions list
@@ -91,14 +100,15 @@ def transitions_valid(transitions):
             # Checks that there are 3 elements for the two
             # states and the character. If not, returns False
             if len(transition) != 3:
+                print('ERROR: A transition does not have exactly 3 elements')
                 return False
 
             # Checks if the transition is a list of strings
             if not is_list_of_strings(transition):
+                print('ERROR: A transition is not a list of strings')
                 return False
 
     return True
-
 
 def concatenate(fa):
     '''
@@ -137,7 +147,9 @@ def concatenate(fa):
         # Extracts the two FA
         a = fa['fa_a']
         b = fa['fa_b']
+
     else:
+        print('ERROR: There are not exactly two finite automata')
         return None
 
     # Extracts the fields (keys) of each disctionary for the two FA
@@ -167,7 +179,7 @@ def concatenate(fa):
     for field in def_fields:
 
         # Checks if the transition list is properly formatted
-        if field is 'transitions':
+        if field == 'transitions':
             if not transitions_valid(a['transitions']):
                 print('ERROR: Transitions for FA A are not properly formatted')
                 return None
@@ -177,23 +189,23 @@ def concatenate(fa):
                 return None            
 
         # Checks if the start state is a string
-        elif field is 'start_state':
+        elif field == 'start_state':
             if not isinstance(a[field], str):
-                print('ERROR: \'' + field + '\' field for FA A are not properly formatted')
+                print('ERROR: \'' + field + '\' field for FA A is not properly formatted')
                 return None
 
             if not isinstance(b[field], str):
-                print('ERROR: \'' + field + '\' field for FA B are not properly formatted')
+                print('ERROR: \'' + field + '\' field for FA B is not properly formatted')
                 return None
 
         # Checks if the other fields are lists of strings
         else:
             if not is_list_of_strings(a[field]):
-                print('ERROR: \'' + field + '\' field for FA A are not properly formatted')
+                print('ERROR: \'' + field + '\' field for FA A is not properly formatted')
                 return None
 
             if not is_list_of_strings(b[field]):
-                print('ERROR: \'' + field + '\' field for FA B are not properly formatted')
+                print('ERROR: \'' + field + '\' field for FA B is not properly formatted')
                 return None
 
     # Combines the transitions of both FAs
@@ -260,6 +272,10 @@ def main(argv):
     creates an NFA for the concatentation of the two languages.
     The output is then printed to the terminal and written to
     the output file.
+
+    Command arguments code modified from the code at the following links:
+    - https://www.tutorialspoint.com/python/python_command_line_arguments.htm
+    - https://www.geeksforgeeks.org/command-line-arguments-in-python/
 
     Parameters:
         argv - list of command arguments
@@ -341,7 +357,3 @@ def main(argv):
 
 if __name__ == '__main__':
     main(sys.argv[1:])
-
-# TODO: Add test cases
-# TODO: Test error handling
-# TODO: Add error checking for the types of the JSON fields
