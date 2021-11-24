@@ -5,8 +5,10 @@ Description:
 Given two input DFAs or NFAs for languages A and B, the program will construct and
 return the NFA that accepts the concatenation AB.
 
+Documentation can be found in README.txt
+
 Author: Kai Vickers
-Last Modified: 11/22/2021
+Last Modified: 11/23/2021
 '''
 
 import sys
@@ -218,7 +220,7 @@ def concatenate(fa):
     # Creates the new NFA
     nfa = {
         # Combines the states of both FAs
-        'states': a['states'] + b['states'],
+        'states': list(set(a['states'] + b['states'])),
 
         # Combines the states of both FAs and
         # removes duplicate characters
@@ -282,14 +284,14 @@ def main(argv):
     '''
 
     # Stores the input and output files
-    input_file = ''
-    output_file = ''
+    input_file = 'input.json'
+    output_file = 'output.json'
 
     # Characters for the command options
-    options = 'dhi:o:'
+    options = 'hi:o:'
 
     # Strings for the command long options
-    long_options = ['help', 'input', 'output', 'default']
+    long_options = ['help', 'input', 'output']
 
     # Tries to parse thecommand for arguments and options
     try:
@@ -303,18 +305,11 @@ def main(argv):
     # Goes through each argument and option in the command
     for opt, arg in opts:
 
-        # Uses the default input and output files
-        if opt in ('-d', '--default'):
-            input_file = 'input.json'
-            output_file = 'output.json'
-            print('Setting input and output files to default.\n')
-
         # Displays summaries of the builtin commands for the program
-        elif opt in ('-h', '--help'):
+        if opt in ('-h', '--help'):
             print('USAGE: concat.py [-h/d] [-i input] [-o output]\n')
             print('Displays brief summaries of builtin commands.\n')
             print('Options:')
-            print('  -d,  --default         reads the default input and output files (input.json and output.json)')
             print('  -h,  --help            prints this help')
             print('  -i,  --input=FILE      reads the specified file as input (if not output file is provided, writes to output.json)')
             print('  -o,  --output=FILE     writes the output to the specified file\n')
@@ -323,19 +318,18 @@ def main(argv):
         # Specifies an input file to read from
         elif opt in ('-i', '--input'):
             input_file = arg
-            output_file = 'output.json'
         
         # Specifies an output file to write to
         elif opt in ('-o', '--output'):
             output_file = arg
 
-    # Prints the input and output files if the command has arguments
-    if len(argv) != 0:        
-        print('Input file: \'' + input_file + '\'\n')
-        print('Output file: \'' + output_file + '\'\n')
-    else:
-        print('USAGE: concat.py [-h/d] [-i input] [-o output]')
-        sys.exit(2)
+    # # Prints the input and output files if the command has arguments
+    # if len(argv) != 0:        
+    #     print('Input file: \'' + input_file + '\'\n')
+    #     print('Output file: \'' + output_file + '\'\n')
+    # else:
+    #     print('USAGE: concat.py [-h/d] [-i input] [-o output]')
+    #     sys.exit(2)
 
     # Reads the input file to a dictionary
     fa_dict = read_fa_from_file(input_file)
@@ -355,5 +349,4 @@ def main(argv):
         else:
             print('ERROR: The finite automata are not in the proper format')
 
-if __name__ == '__main__':
-    main(sys.argv[1:])
+main(sys.argv[1:])
