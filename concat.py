@@ -252,7 +252,7 @@ def write_nfa_to_file(file_name, nfa):
     # Converts the NFA to a JSON string
     try:
         output_json = json.dumps(nfa, indent=4)
-        print('Resulting NFA for A and B:\n')
+        print('Resulting NFA for AB:\n')
         print(output_json, "\n")
 
     # Prints an error if the 
@@ -299,7 +299,7 @@ def main(argv):
     
     # Prints the usage pattern if an argument occurs
     except getopt.GetoptError:
-        print('USAGE: concat.py [-h/d] [-i input] [-o output]\n')
+        print('USAGE: concat.py [-h] [-i input] [-o output]\n')
         sys.exit(2)
 
     # Goes through each argument and option in the command
@@ -307,7 +307,7 @@ def main(argv):
 
         # Displays summaries of the builtin commands for the program
         if opt in ('-h', '--help'):
-            print('USAGE: concat.py [-h/d] [-i input] [-o output]\n')
+            print('USAGE: concat.py [-h] [-i input] [-o output]\n')
             print('Displays brief summaries of builtin commands.\n')
             print('Options:')
             print('  -h,  --help            prints this help')
@@ -323,13 +323,10 @@ def main(argv):
         elif opt in ('-o', '--output'):
             output_file = arg
 
-    # # Prints the input and output files if the command has arguments
-    # if len(argv) != 0:        
-    #     print('Input file: \'' + input_file + '\'\n')
-    #     print('Output file: \'' + output_file + '\'\n')
-    # else:
-    #     print('USAGE: concat.py [-h/d] [-i input] [-o output]')
-    #     sys.exit(2)
+    # Prints the input and output files:
+    print('Input file: \'' + input_file + '\'\n')
+    print('Output file: \'' + output_file + '\'\n')
+   
 
     # Reads the input file to a dictionary
     fa_dict = read_fa_from_file(input_file)
